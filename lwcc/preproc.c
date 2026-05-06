@@ -494,7 +494,7 @@ static char *preproc_file_exists_in_dir(char *dir, char *fn)
 
 static char *preproc_find_file(struct preproc_info *pp, char *fn, int sys)
 {
-	char *tstr;
+	const char *tstr;
 	char *pref;
 	char *rfn;
 

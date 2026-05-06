@@ -638,7 +638,7 @@ static int parse_flags_string(asmstate_t *as, line_t *l, char **p)
 {
 	static const char *flags = "CVZNIHFE";
 	int rv = 0;
-	char *ptr;
+	const char *ptr;
 	
 	while (**p && (ptr = strchr(flags, toupper(**p))))
 	{

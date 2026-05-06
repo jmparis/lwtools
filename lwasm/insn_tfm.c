@@ -28,7 +28,7 @@ PARSEFUNC(insn_parse_tfm)
 {
 	static const char *reglist = "DXYUS   AB  00EF";
 	int r0, r1;
-	char *c;
+	const char *c;
 	int tfm = 0;
 			
 	c = strchr(reglist, toupper(*(*p)++));
