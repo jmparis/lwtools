@@ -7,3 +7,5 @@ lwcc/lwcc-cpp
 lwlib/liblw.a
 lwlink/lwlink
 lwlink/lwobjdump
+
+lwcc/*.d
