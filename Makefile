@@ -68,8 +68,63 @@ LWCC_LIBBIN_FILES = lwcc/lwcc-cpp$(PROGSUFFIX) lwcc/lwcc-cc$(PROGSUFFIX)
 LWCC_LIBLIB_FILES =
 LWCC_LIBINC_FILES =
 
-.PHONY: default
-default: $(MAIN_TARGETS)
+ifneq ($(NO_COLOR),)
+COLOR_RESET :=
+COLOR_BOLD :=
+COLOR_DIM :=
+COLOR_TITLE :=
+COLOR_SECTION :=
+COLOR_TARGET :=
+COLOR_VAR :=
+else
+COLOR_RESET := \033[0m
+COLOR_BOLD := \033[1m
+COLOR_DIM := \033[2m
+COLOR_TITLE := \033[1;36m
+COLOR_SECTION := \033[1;34m
+COLOR_TARGET := \033[1;32m
+COLOR_VAR := \033[1;33m
+endif
+
+.PHONY: default usage help
+default: usage
+
+usage: help
+
+help:
+	@printf "\n$(COLOR_TITLE)LWTOOLS Makefile$(COLOR_RESET)\n"
+	@printf "$(COLOR_DIM)Usage:$(COLOR_RESET) make $(COLOR_TARGET)<target>$(COLOR_RESET) [$(COLOR_VAR)VARIABLE=value$(COLOR_RESET)]\n\n"
+	@printf "$(COLOR_SECTION)Build targets$(COLOR_RESET)\n"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n" "all" "Build every program"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n" "lwasm" "Build the assembler"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n" "lwlink" "Build the linker"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n" "lwobjdump" "Build the object dumper"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n" "lwar" "Build the archive tool"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n" "lwcc" "Build the lwcc driver"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n" "lwcc-cpp" "Build the lwcc preprocessor"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n\n" "lwcc-cpplib" "Build the lwcc preprocessor library"
+	@printf "$(COLOR_SECTION)Install targets$(COLOR_RESET)\n"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n" "install" "Install main programs to $(INSTALLBIN)"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n\n" "install-all" "Install every program and lwcc support files"
+	@printf "$(COLOR_SECTION)Clean and check targets$(COLOR_RESET)\n"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n" "clean" "Remove built objects and programs"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n" "realclean" "Also remove generated dependency files"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n\n" "test" "Build everything and run the test suite"
+	@printf "$(COLOR_SECTION)Utility targets$(COLOR_RESET)\n"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n" "help" "Show this usage screen"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n" "usage" "Alias for help"
+	@printf "  $(COLOR_TARGET)%-12s$(COLOR_RESET) %s\n\n" "print-VAR" "Print a Make variable, for example make print-PREFIX"
+	@printf "$(COLOR_SECTION)Useful variables$(COLOR_RESET)\n"
+	@printf "  $(COLOR_VAR)%-12s$(COLOR_RESET) %s\n" "PREFIX" "Installation prefix (current: $(PREFIX))"
+	@printf "  $(COLOR_VAR)%-12s$(COLOR_RESET) %s\n" "DESTDIR" "Staging root for packaging (current: $(DESTDIR))"
+	@printf "  $(COLOR_VAR)%-12s$(COLOR_RESET) %s\n" "PROGSUFFIX" "Program suffix, for example .exe (current: $(PROGSUFFIX))"
+	@printf "  $(COLOR_VAR)%-12s$(COLOR_RESET) %s\n" "BUILDTPREFIX" "Cross-toolchain prefix, for example i686-w64-mingw32- (current: $(BUILDTPREFIX))"
+	@printf "  $(COLOR_VAR)%-12s$(COLOR_RESET) %s\n\n" "NO_COLOR" "Set to 1 to disable colors"
+	@printf "$(COLOR_BOLD)Examples$(COLOR_RESET)\n"
+	@printf "  make all\n"
+	@printf "  make install PREFIX=/usr DESTDIR=/tmp/pkg\n"
+	@printf "  make install PREFIX=${HOME}/.local\n"
+	@printf "  make NO_COLOR=1\n\n"
 
 .PHONY: all
 all: $(MAIN_TARGETS) $(SECONDARY_TARGETS)
@@ -243,4 +298,3 @@ endif
 .PHONY: test
 test: all test/runtests
 	@test/runtests
-
