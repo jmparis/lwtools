@@ -9,3 +9,5 @@ lwlink/lwlink
 lwlink/lwobjdump
 
 lwcc/*.d
+lwcc/lwcc
+lwcc/lwcc-cc
